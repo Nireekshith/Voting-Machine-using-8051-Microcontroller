@@ -1,0 +1,277 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	..\main.asm
+	Object File:	Debug.HEX
+	List File:	Debug.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:	  0000	78 30		MOV R0,#'0'
+    2:	  0002	79 39		MOV R1,#'9'
+    3:	  0004			FIND:
+    4:	  0004	30 90 02	jnb p1.0,start
+    5:	  0007	80 FB		sjmp find
+    6:
+    7:	  0009			start:
+    8:	  0009	11 50		acall startlcd
+    9:	  000B	90 02 00	mov dptr,#data1
+   10:	  000E	11 46		ACALL strt
+   11:	  0010	11 82		ACALL DATAWRT
+   12:	  0012			find1:
+   13:	  0012	30 91 07	jnb p1.1,start2
+   14:	  0015	30 92 19	jnb p1.2,start3
+   15:	  0018	80 F8		sjmp find1
+   16:	  001A	80 E8		sjmp find
+   17:
+   18:	  001C			start2:
+   19:	  001C	11 50		acall startlcd
+   20:	  001E	90 02 13	mov dptr,#data2
+   21:	  0021	11 46		acall strt
+   22:	  0023	08		inc r0
+   23:	  0024	11 69		acall value
+   24:	  0026	E8		MOV A,R0
+   25:	  0027			empty:
+   26:	  0027	11 82		ACALL DATAWRT
+   27:	  0029	19		DEC R1
+   28:	  002A	11 6E		ACALL VALUE2
+   29:	  002C	E9		Mov A,R1
+   30:	  002D	11 82		ACALL DATAWRT
+   31:	  002F	80 E1		sjmp find1
+   32:
+   33:	  0031			start3:
+   34:	  0031	11 50		acall startlcd
+   35:	  0033	90 02 24	mov dptr,#data3
+   36:	  0036	11 46		acall strt
+   37:	  0038	18		DEC r0
+   38:	  0039	11 69		acall value
+   39:	  003B	E8		MOV A,R0
+   40:	  003C	11 82		ACALL DATAWRT
+   41:	  003E	09		INC R1
+   42:	  003F	11 6E		ACALL VALUE2
+   43:	  0041	E9		Mov A,R1
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44:	  0042	11 82		ACALL DATAWRT
+   45:	  0044	80 CC		sjmp find1
+   46:
+   47:	  0046			strt:
+   48:	  0046	E4		CLR A
+   49:	  0047	93		MOVC A,@A+DPTR
+   50:	  0048	60 05		JZ aga
+   51:	  004A	11 82		ACALL DATAWRT
+   52:	  004C	A3		inc dptr
+   53:	  004D	80 F7		sjmp strt
+   54:	  004F	22		aga: RET
+   55:
+   56:	  0050			startlcd:
+   57:	  0050	74 80		MOV A,#80H
+   58:	  0052	11 73		ACALL COMNWRT
+   59:	  0054	74 38		MOV A,#38H
+   60:	  0056	11 73		ACALL COMNWRT
+   61:	  0058	74 0E		MOV A,#0EH
+   62:	  005A	11 73		ACALL COMNWRT
+   63:	  005C	74 01		MOV A,#01H
+   64:	  005E	11 73		ACALL COMNWRT
+   65:	  0060	74 06		MOV A,#06H
+   66:	  0062	11 73		ACALL COMNWRT
+   67:	  0064	74 14		MOV A,#14H
+   68:	  0066	11 73		ACALL COMNWRT
+   69:	  0068	22		RET
+   70:
+   71:	  0069			value:
+   72:	  0069	74 C0		MOV A,#0C0H
+   73:	  006B	11 73		ACALL COMNWRT
+   74:	  006D	22		RET
+   75:	  006E			VALUE2:
+   76:	  006E	74 C9		MOV A,#0C9H
+   77:	  0070	11 73		ACALL COMNWRT
+   78:	  0072	22		RET
+   79:	  0073			COMNWRT:
+   80:	  0073	F5 B0		MOV P3,A
+   81:	  0075	C2 A0		CLR P2.0
+   82:	  0077	C2 A1		CLR P2.1
+   83:	  0079	D2 A2		SETB P2.2
+   84:	  007B	11 91		ACALL DELAY
+   85:	  007D	C2 A2		CLR P2.2
+   86:	  007F	11 91		ACALL DELAY
+   87:	  0081	22		RET
+   88:
+   89:	  0082			DATAWRT:
+   90:	  0082	F5 B0		MOV P3,A
+   91:	  0084	D2 A0		SETB P2.0
+   92:	  0086	C2 A1		CLR P2.1
+   93:	  0088	D2 A2		SETB P2.2
+   94:	  008A	11 91		ACALL DELAY
+   95:	  008C	C2 A2		CLR P2.2
+   96:	  008E	11 91		ACALL DELAY
+   97:	  0090	22		RET
+   98:
+   99:	  0091	7D 32		DELAY: MOV R5,#50
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100:	  0093	7E C8		HERE2: MOV R6,#200
+  101:	  0095	DE FE		HERE:DJNZ R6,HERE
+  102:	  0097	DD FA		DJNZ R5,HERE2
+  103:	  0099	22		RET
+  104:
+  105:		N      0200	org 200h
+  106:	  0200	43 41 52 20	data1: DB 'CAR PARKING SYSTEM',0
+	  0204	50 41 52 4B
+	  0208	49 4E 47 20
+	  020C	53 59 53 54
+	  0210	45 4D 00
+  107:	  0213	43 41 52 53	data2: DB 'CARS ENTER SLOTS',0
+	  0217	20 45 4E 54
+	  021B	45 52 20 53
+	  021F	4C 4F 54 53
+	  0223	00
+  108:	  0224	43 41 52 53	data3: DB 'CARS LEFT SLOTS',0
+	  0228	20 4C 45 46
+	  022C	54 20 53 4C
+	  0230	4F 54 53 00
+  109:
+  110:				end
+  111:
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+AGA				  CODE	    004F	  54
+B				  DATA	      F0
+COMNWRT				  CODE	    0073	  79
+CY				  BIT	      D7
+DATA1				  CODE	    0200	 106
+DATA2				  CODE	    0213	 107
+DATA3				  CODE	    0224	 108
+DATAWRT				  CODE	    0082	  89
+DELAY				  CODE	    0091	  99
+DPH				  DATA	      83
+DPL				  DATA	      82
+EA				  BIT	      AF
+EMPTY				  CODE	    0027	  25
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+FIND				  CODE	    0004	   3
+FIND1				  CODE	    0012	  12
+HERE				  CODE	    0095	 101
+HERE2				  CODE	    0093	 100
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+IP				  DATA	      B8
+IT0				  BIT	      88
+IT1				  BIT	      8A
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RB8				  BIT	      9A
+RD				  BIT	      B7
+REN				  BIT	      9C
+RESET				  CODE	    0000
+RI				  BIT	      98
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+SBUF				  DATA	      99
+SCON				  DATA	      98
+SINT				  CODE	    0023
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+START				  CODE	    0009	   7
+START2				  CODE	    001C	  18
+START3				  CODE	    0031	  33
+STARTLCD			  CODE	    0050	  56
+STRT				  CODE	    0046	  47
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TXD				  BIT	      B1
+VALUE				  CODE	    0069	  71
+VALUE2				  CODE	    006E	  75
+WR				  BIT	      B6
